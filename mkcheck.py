@@ -18,64 +18,64 @@ lines = codecs.open('MK-dict.txt', 'r', 'utf-8').readlines()
 
 DICT = {}
 for l in lines:
-	DICT[l.replace('\r\n', '')] = 1
+    DICT[l.replace('\r\n', '')] = 1
 
 def is_cyrillic_letter(letter):
-	letters = u"љњертѕуиопасдфгхјклзџцвбнмЉЊЕРТЅУИОПАСДФГХЈКЛЗЏЦВБНМчЧќЌѓЃшШ"
-	return letter in letters
+    letters = u"љњертѕуиопасдфгхјклзџцвбнмЉЊЕРТЅУИОПАСДФГХЈКЛЗЏЦВБНМчЧќЌѓЃшШ"
+    return letter in letters
 
 def is_cyrillic_word(word):
-	return all(map(is_cyrillic_letter, word))
+    return all(map(is_cyrillic_letter, word))
 
 def words_with_positions(text):
-	words = []
-	current_word = ''
-	inside_word = False
-	word_start = 0
-	for i, letter in enumerate(text):
-		if is_cyrillic_letter(letter) and not inside_word:
-			inside_word = True
-			word_start = i
-		if inside_word:
-			if letter != ' ' and letter != '\n':
-				current_word += letter
-		if letter == ' ' or letter == '\n' and inside_word:
-			w = (current_word, word_start, i)
-			words.append(w)
-			inside_word = False
-			current_word = ''
-	if inside_word:
-		w = (current_word, word_start, i)
-		words.append(w)
-	return words
+    words = []
+    current_word = ''
+    inside_word = False
+    word_start = 0
+    for i, letter in enumerate(text):
+        if is_cyrillic_letter(letter) and not inside_word:
+            inside_word = True
+            word_start = i
+        if inside_word:
+            if letter != ' ' and letter != '\n':
+                current_word += letter
+        if letter == ' ' or letter == '\n' and inside_word:
+            w = (current_word, word_start, i)
+            words.append(w)
+            inside_word = False
+            current_word = ''
+    if inside_word:
+        w = (current_word, word_start, i)
+        words.append(w)
+    return words
 
 def replace_some_symbols(word):
-	return word.replace('.', '') \
-		       .replace(',', '') \
-		       .replace(';', '') \
-		       .replace(u'„', '') \
-		       .replace(u'“', '') \
-		       .replace('-', '')
+    return word.replace('.', '') \
+               .replace(',', '') \
+               .replace(';', '') \
+               .replace(u'„', '') \
+               .replace(u'“', '') \
+               .replace('-', '')
 
 for w in words_with_positions(text):
-	word, start, end = w
-	if word in DICT:
-		continue
-	else:
-		clean_word = replace_some_symbols(word)
-		if clean_word.lower() not in DICT:
-			sys.stdout.write(w[0])
-			sys.stdout.write(' ' + str(w[1]))
-			sys.stdout.write(' ' + str(w[2]))
-			sys.stdout.write('\n')
+    word, start, end = w
+    if word in DICT:
+        continue
+    else:
+        clean_word = replace_some_symbols(word)
+        if clean_word.lower() not in DICT:
+            sys.stdout.write(w[0])
+            sys.stdout.write(' ' + str(w[1]))
+            sys.stdout.write(' ' + str(w[2]))
+            sys.stdout.write('\n')
 
 def strip_non_cyrillic(word):
-	pass
+    pass
 
 def check(text):
-	words = text.split(' ')
-	for word in words:
-		sys.stdout.write(word)
-		sys.stdout.write('\n')
+    words = text.split(' ')
+    for word in words:
+        sys.stdout.write(word)
+        sys.stdout.write('\n')
 
 # check(text)
